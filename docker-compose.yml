@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+  mongo:
+    image: mongo
+    ports:
+      - 27019:27017
+    volumes:
+      - ~/workspace/docker/mongo/mongo_data:/data/url_shortener_db
+    healthcheck:
+      test: echo 'db.stats().ok' | mongo localhost:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+    networks:
+      - backend
+  urlshortener:
+    build: ./
+    depends_on:
+      - mongo
+    ports:
+      - 3001:3333
+    volumes:
+      - ~/workspace/docker/urlshortener/data:/usr/src/app/logs
+    environment:
+      - NODE_ENV=production
+      - APP_PORT=3333
+      - DB_URL=mongodb://mongo:27017/urlshortener_db
+      - BASE=http://localhost:3333
+    networks:
+      - backend
+    restart: always
+networks:
+  backend:
+    driver: bridge
