@@ -15,7 +15,6 @@ const UrlSchema = new mongoose.Schema({
   },
   date: {
     type: String,
-    default: Date.now,
   },
 });
 

@@ -4,6 +4,7 @@ const shortid = require('shortid');
 const bodyParser = require("body-parser");
 const Url = require('../models/Url');
 const utils = require('../utils/util');
+const moment = require('moment-timezone');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -27,35 +28,39 @@ class ShortUrlController {
                 try {
                     let url = await Url.findOne({ origUrl });
                     if (url) {
-                        res.json(url);
+                        //console.log(origUrl);
+                        return res.redirect('/');
+                        //res.json(url);
                     } else {
                         const shortUrl = `${base}/${urlId}`;
-
+                        const today = moment().tz('America/Manaus').format('DD/MM/YYYY HH:mm:ss');
                         url = new Url({
                             origUrl,
                             shortUrl,
                             urlId,
-                            date: new Date(),
+                            date: today,
                         });
-
+                        //console.log(origUrl);
                         await url.save();
-                        res.json(url);
-                        console.log(origUrl);
-                        Url.push(origUrl);
-                        res.send('Url is added to the database');
+                        //res.json(url);
+                        return res.redirect('/');
+
                     }
                 } catch (err) {
                     console.log(err);
-                    res.status(500).json('Server Error');
+                    // res.status(500).json('Server Error');
+                    return res.redirect('/');
                 }
             } else {
-                res.status(400).json('Invalid Original Url');
+                console.log('Invalid Original Url');
+                return res.redirect('/');
             }
 
 
 
         } catch (err) {
             console.log(err);
+            return res.redirect('/');
         }
     }
 

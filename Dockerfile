@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 RUN npm install
-RUN npm i express mongoose shortid body-parser
+RUN npm i express mongoose shortid body-parser moment-timezone
 RUN npm i -D nodemon
 COPY . .
 

@@ -6,7 +6,13 @@ const ShortUrlController = require("../controllers/ShortUrlController");
 
 routes.get("/index", UrlController.listUrl);
 
-routes.get('/:urlId', UrlController.findUrl);
+routes.get("/create", UrlController.createUrl);
+
+routes.get('/openUrl', UrlController.openUrl);
+
+//routes.get('/:urlId', UrlController.findUrl);
+
+routes.post('/find', UrlController.findUrl);
 
 routes.post("/short", ShortUrlController.shortUrl);
 
